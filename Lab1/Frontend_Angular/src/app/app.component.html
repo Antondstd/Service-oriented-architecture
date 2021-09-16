@@ -1,0 +1,263 @@
+<div class="mainBlock">
+  <div class="left_column">
+    <div class="filters">
+      <h3>Фильтры</h3>
+      <mat-slide-toggle color="accent" [(ngModel)]="additionForTable.filter.isActive"></mat-slide-toggle>
+      <mat-list>
+
+        <mat-list-item>
+          <mat-form-field appearance="standard">
+            <mat-label>Name</mat-label>
+            <input [formControl]="additionForTable.getField('name')!!.formControl"
+                   matInput [(ngModel)]="additionForTable.getField('name')!!.data">
+          </mat-form-field>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-form-field class="filter_field" appearance="standard">
+            <mat-label>X</mat-label>
+            <input [formControl]="additionForTable.getField('coordinates.x')!!.formControl" matInput pattern="-?\d*"
+                   [(ngModel)]="additionForTable.getField('coordinates.x')!!.data">
+          </mat-form-field>
+          <div
+            *ngIf="!additionForTable.getField('coordinates.x')!!.formControl.valid && additionForTable.getField('coordinates.x')!!.formControl.touched">
+            Необходимо вводить лишь цифры
+          </div>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-form-field appearance="standard">
+            <mat-label>Y</mat-label>
+            <input [formControl]="additionForTable.getField('coordinates.y')!!.formControl" matInput pattern="-?\d*"
+                   [(ngModel)]="additionForTable.getField('coordinates.y')!!.data">
+          </mat-form-field>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-form-field class="example-full-width" appearance="standard">
+            <mat-label>Creation Date</mat-label>
+            <input [formControl]="additionForTable.getField('creationDate')!!.formControl"
+                   matInput [matDatepicker]="picker" [(ngModel)]="additionForTable.getField('creationDate')!!.data">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <!--        <mat-datepicker [dateClass]="dateClass" #picker></mat-datepicker>-->
+            <mat-datepicker [dateClass]="dateClass" #picker></mat-datepicker>
+          </mat-form-field>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-form-field appearance="standard">
+            <mat-label>Price</mat-label>
+            <input [formControl]="additionForTable.getField('price')!!.formControl"
+                   matInput pattern="-?\d*" [(ngModel)]="additionForTable.getField('price')!!.data">
+          </mat-form-field>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-form-field appearance="standard">
+            <mat-label>Discount</mat-label>
+            <input [formControl]="additionForTable.getField('discount')!!.formControl"
+                   matInput pattern="-?\d*" [(ngModel)]="additionForTable.getField('discount')!!.data">
+          </mat-form-field>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-form-field appearance="standard">
+            <mat-label>Comment</mat-label>
+            <input [formControl]="additionForTable.getField('comment')!!.formControl"
+                   matInput [(ngModel)]="additionForTable.getField('comment')!!.data">
+          </mat-form-field>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-form-field appearance="standard">
+            <mat-label>Type</mat-label>
+            <mat-select [formControl]="additionForTable.getField('type')!!.formControl"
+                        [(ngModel)]="additionForTable.getField('type')!!.data">
+              <mat-option *ngFor="let typeRange of typeRanges" [value]="typeRange">{{typeRange}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-form-field appearance="standard">
+            <mat-label>Event - Name</mat-label>
+            <input [formControl]="additionForTable.getField('event.name')!!.formControl"
+                   matInput [(ngModel)]="additionForTable.getField('event.name')!!.data">
+          </mat-form-field>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-form-field appearance="standard">
+            <mat-label>Event - Date</mat-label>
+            <input [formControl]="additionForTable.getField('event.date')!!.formControl"
+                   matInput [owlDateTime]="dt1" [owlDateTimeTrigger]="dt1"
+                   [(ngModel)]="additionForTable.getField('event.date')!!.data">
+            <owl-date-time #dt1 [showSecondsTimer]=true></owl-date-time>
+            <!--          <input matInput type="datetime-local" [(ngModel)]="additionForTable.filter.fields.get('event.date')!!.data">-->
+          </mat-form-field>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-form-field appearance="standard">
+            <mat-label>Event - Minimum Age</mat-label>
+            <input [formControl]="additionForTable.getField('event.minAge')!!.formControl"
+                   matInput pattern="-?\d*" [(ngModel)]="additionForTable.getField('event.minAge')!!.data">
+          </mat-form-field>
+        </mat-list-item>
+        <button *ngIf="additionForTable.filter.isActive" mat-flat-button color="primary"
+                class="buttons_menu button_table"
+                (click)="getTickets()">Отфильтровать
+          <mat-icon>filter_list</mat-icon>
+        </button>
+        <button *ngIf="!additionForTable.filter.isActive" mat-flat-button color="primary"
+                class="buttons_menu button_table"
+                (click)="getTickets()">Обновить
+          <mat-icon>filter_list</mat-icon>
+        </button>
+
+      </mat-list>
+
+    </div>
+    <div class="filters">
+      <mat-list>
+
+        <mat-form-field appearance="standard">
+          <mat-label>Type</mat-label>
+          <mat-select
+                      [(ngModel)]="deleteTypeTicket">
+            <mat-option *ngFor="let typeRange of typeRanges" [value]="typeRange">{{typeRange}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-flat-button color="primary"
+                class="buttons_menu button_table"
+                (click)="deleteTicketByType(deleteTypeTicket)">Удалить
+          <mat-icon>filter_list</mat-icon>
+        </button>
+
+        <div class="divider"></div>
+
+        <button mat-flat-button color="primary"
+                class="buttons_menu button_table"
+                (click)="getGroupedDiscount()">Сгруппировать по <br>Discount
+          <mat-icon>filter_list</mat-icon>
+        </button>
+
+        <div class="divider"></div>
+
+        <button mat-flat-button color="primary"
+                class="buttons_menu button_table"
+                (click)="getDistinctType()">Получить <br>
+          уникальные значения<br>
+          Type
+          <mat-icon>filter_list</mat-icon>
+        </button>
+
+      </mat-list>
+    </div>
+  </div>
+
+  <div class="tickets_table">
+    <div class="mat-elevation-z8" id="tickets_table">
+      <table #ticketsTable mat-table [dataSource]="tickets" matSort (matSortChange)="sortData($event)">
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+          <td mat-cell *matCellDef="let element">{{element.id}}</td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let element">{{element.name}}</td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="coordinates.x">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>X</th>
+          <td mat-cell *matCellDef="let element">{{element.coordinates.x}}</td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="coordinates.y">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Y</th>
+          <td mat-cell *matCellDef="let element">{{element.coordinates.y}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="creationDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Creation Date</th>
+          <td mat-cell *matCellDef="let element">{{element.creationDate}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Price</th>
+          <td mat-cell *matCellDef="let element">{{element.price}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="discount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Discount</th>
+          <td mat-cell *matCellDef="let element">{{element.discount}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="comment">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Comment</th>
+          <td mat-cell *matCellDef="let element">{{element.comment}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+          <td mat-cell *matCellDef="let element">{{element.type.toString()}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="event.name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Event Name</th>
+          <td mat-cell *matCellDef="let element">{{element.event?.name}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="event.date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Event - Date</th>
+          <td mat-cell *matCellDef="let element">{{element.event?.date}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="event.minAge">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Event - minAge</th>
+          <td mat-cell *matCellDef="let element">{{element.event?.minAge}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="edit" r>
+          <th mat-header-cell *matHeaderCellDef>Редактирование</th>
+          <td mat-cell *matCellDef="let element;let i = index">
+            <button mat-flat-button color="primary" class="buttons_menu button_table"
+                    (click)="openAddTicketDialog(false, i)">Изменить
+              <mat-icon>cached</mat-icon>
+            </button>
+            <button mat-flat-button color="warn" class="button_table" (click)="deleteTicket(i)">Удалить
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="additionForTable.getAllTableFields()"></tr>
+        <tr mat-row *matRowDef="let row; columns: additionForTable.getAllTableFields();"></tr>
+      </table>
+      <mat-paginator [length]="additionForTable.countAll"
+                     showFirstLastButtons
+                     [pageSize]="additionForTable.perPage"
+                     [pageSizeOptions]="[additionForTable.perPage]"
+                     (page)="paginator($event)"
+                     aria-label="Select page">
+      </mat-paginator>
+    </div>
+
+  </div>
+</div>
+<div class="right-corner-menu">
+
+  <button mat-fab color="primary" aria-label="Add Ticket" class="buttons_menu" (click)="openAddTicketDialog(true, 0)">
+    <mat-icon>note_add</mat-icon>
+  </button>
+
+  <button mat-fab color="basic" aria-label="Example icon button with a bookmark icon" class="buttons_menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+</div>
