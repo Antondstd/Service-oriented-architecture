@@ -22,7 +22,7 @@ class TicketService() : TicketDAO() {
     ): ResponsePagesTickets? {
 
         val tickets: List<Ticket>?
-        val regExParam = "^(\\w+)\\(([\\w]+)\\)\$".toRegex()
+        val regExParam = "^(\\w+)\\(([\\w.]+)\\)\$".toRegex()
         val regExName = "^(\\w+).(\\w+)$".toRegex()
         val sortQueryAdditions: MutableList<QueryAdditions> = mutableListOf()
         val filerQueryAdditions: MutableList<QueryAdditions> = mutableListOf()
@@ -65,7 +65,7 @@ class TicketService() : TicketDAO() {
                 }
             }
             else{
-                throw BadRequestException("Был указан неверный паарметр для сортировки $it")
+                throw BadRequestException("Был указан неверный параметр для сортировки $it")
             }
         }
 
@@ -81,36 +81,26 @@ class TicketService() : TicketDAO() {
             val table = when (name[0]) {
                 "coordinates" -> TablesQueryAdditions.COORDINATES
                 "event" -> TablesQueryAdditions.EVENT
-                else -> TablesQueryAdditions.TICKET // TODO добавить проверку имен таблиц
+                else -> TablesQueryAdditions.TICKET
             }
             filerQueryAdditions.add(QueryAdditions(table, name[1], value[0], if (value.size > 1) value[1] else null))
         }
-        val pairCountMessage = getCountTicket(filerQueryAdditions)
-        if (pairCountMessage.second != null){
-            throw Exception(pairCountMessage.second) // TODO тут че-то странное я делаю
-        }
-        val count = pairCountMessage.first
+        val count = getCountTicket(filerQueryAdditions)
         if (count == 0L)
             return null
         println("COUNT = $count")
         var pageNumber: Int
         var curPage:Int = page
-        if (count != null)
-            pageNumber = Math.ceil(count.toDouble() / perPage).toInt()
-        else
-            return null
+
+        pageNumber = Math.ceil(count.toDouble() / perPage).toInt()
         if (page > pageNumber)
             curPage = pageNumber
-//            tickets = getSortedFilteredTickets(page,perPage,sortMap,filterMap)
         val pairTicketsMessage:Pair<List<Ticket>?, String?>
         try {
             pairTicketsMessage = getSortedFilteredTickets(curPage, perPage, sortQueryAdditions, filerQueryAdditions)
         }
         catch (e:Exception){
             throw e
-        }
-        if (pairCountMessage.second != null){
-            throw Exception(pairCountMessage.second)
         }
         tickets = pairTicketsMessage.first
         println(tickets)
@@ -125,6 +115,9 @@ class TicketService() : TicketDAO() {
         } catch (exception: Exception) {
             throw UnprocessableEntityException("Невалидный xml")
         }
+        newTicket.id = 0
+        newTicket.event?.id = 0
+        newTicket.coordinates?.id = 0
         newTicket.checkConstrains()
         return addTicket(newTicket)
     }
@@ -143,6 +136,8 @@ class TicketService() : TicketDAO() {
         if (oldTicket != null) {
             newTicket.creationDate = oldTicket.creationDate
             newTicket.id = oldTicket.id
+            newTicket.event?.id  = oldTicket.event?.id!!
+            newTicket.coordinates?.id = oldTicket.coordinates?.id!!
             updateTicket(newTicket)
         }
 

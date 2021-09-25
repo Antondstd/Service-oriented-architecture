@@ -11,19 +11,19 @@ import javax.validation.constraints.NotNull
 @Entity
 data class Event(
     @NotNull
-    private var name:String? = null,
+    private var name: String? = null,
     @NotNull
-    private var date:LocalDateTime? = null,
+    private var date: LocalDateTime? = null,
     @NotNull
-    private var minAge:Int? = null
+    private var minAge: Int? = null
 //    private var ticketsCount:Long = 0,
 //    private var eventType:EventType = EventType.BASEBALL
-){
+) {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private var id:Long =0
+    var id: Long = 0
 
-    fun checkConstrains(){
+    fun checkConstrains() {
         val EVENT_PRE = "У объекта Event "
         if (name == null)
             throw UnprocessableEntityException(EVENT_PRE + "name не должен быть null")

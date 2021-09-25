@@ -7,10 +7,10 @@ import ru.itmo.SOA_Backend_Lab1.Model.TicketType
 class ParamsChecker {
     companion object{
 
-        fun getAndCheckStringToPositiveLong(name:String,numberS:String):Long{
+        fun getAndCheckStringToPositiveLong(name:String,numberS:String?):Long{
             val number:Long
             try {
-                number = numberS.toLong()
+                number = numberS!!.toLong()
             }
             catch (e:Exception){
                 throw BadRequestException("$name должно быть числом")

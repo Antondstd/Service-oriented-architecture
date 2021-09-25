@@ -8,6 +8,7 @@ import ru.itmo.SOA_Backend_Lab1.Util.HibernateUtil
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import javax.persistence.NoResultException
+import javax.persistence.PersistenceException
 import javax.persistence.criteria.*
 
 
@@ -89,24 +90,22 @@ abstract class TicketDAO {
             resultQuery.where(criteriaBuilder.and(*conditions.toTypedArray()))
     }
 
-    fun getCountTicket(filterAdditions: List<QueryAdditions>?): Pair<Long?,String?> {
+    fun getCountTicket(filterAdditions: List<QueryAdditions>?): Long {
         var transaction: Transaction? = null
             val session = HibernateUtil.sessionFactory?.openSession()
             transaction = session?.beginTransaction()
             if (transaction == null || session == null)
-                return Pair(null,"Не удалось создать транзакцию")
+                throw Exception("Не удалось создать транзакцию. Нет сессии с базой данных.")
             val criteriaBuilder = session.criteriaBuilder!!
             val createQueryCount = criteriaBuilder.createQuery(Long::class.java)
-//            val createQueryTicket = criteriaBuilder.createQuery(Ticket::class.java)
             val root = createQueryCount.from(Ticket::class.java)
-            println("FILTER COUNT")
             if (filterAdditions != null && filterAdditions.size > 0) {
                 addClause(filterAdditions, root, false, createQueryCount, criteriaBuilder)
             }
             createQueryCount.select(criteriaBuilder.count(root))
             val count = session.createQuery(createQueryCount).singleResult
             transaction.commit()
-            return Pair(count as Long,null)
+            return count
     }
 
     fun getTicket(id: Long): Ticket? {
@@ -163,7 +162,11 @@ abstract class TicketDAO {
             transaction.commit()
             session
             return ticket
-        } catch (e: Exception) {
+        }
+        catch (e:PersistenceException){
+            throw BadRequestException(e.cause.toString())
+        }
+        catch (e: Exception) {
             if (transaction != null)
                 transaction.rollback()
             e.printStackTrace()

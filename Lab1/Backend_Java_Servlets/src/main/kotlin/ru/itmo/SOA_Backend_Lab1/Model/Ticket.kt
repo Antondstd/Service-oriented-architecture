@@ -21,12 +21,11 @@ data class Ticket(
     @NotNull
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn
-//    @JacksonXmlElementWrapper(localName = "coordinates")
     var coordinates: Coordinates? = null,
-    @NotNull
-    @CreationTimestamp
-    @Column(columnDefinition= "TIMESTAMP WITH TIME ZONE")
-    var creationDate: ZonedDateTime = ZonedDateTime.now(),
+//    @NotNull
+//    @CreationTimestamp
+//    @Column(columnDefinition= "TIMESTAMP WITH TIME ZONE")
+//    val creationDate: ZonedDateTime = ZonedDateTime.now(),
     @NotNull
     @Min(0)
     var price: Long? = null,
@@ -44,6 +43,15 @@ data class Ticket(
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     var id: Long = 0
+
+    @NotNull
+    @CreationTimestamp
+    @Column(columnDefinition= "TIMESTAMP WITH TIME ZONE")
+    var creationDate: ZonedDateTime = ZonedDateTime.now()
+
+    init {
+
+    }
 
     companion object{
         fun getNamesForFilter():List<String> {

@@ -174,13 +174,13 @@
         <!-- Weight Column -->
         <ng-container matColumnDef="coordinates.x">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>X</th>
-          <td mat-cell *matCellDef="let element">{{element.coordinates.x}}</td>
+          <td mat-cell *matCellDef="let element">{{element.coordinates?.x}}</td>
         </ng-container>
 
         <!-- Symbol Column -->
         <ng-container matColumnDef="coordinates.y">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Y</th>
-          <td mat-cell *matCellDef="let element">{{element.coordinates.y}}</td>
+          <td mat-cell *matCellDef="let element">{{element.coordinates?.y}}</td>
         </ng-container>
 
         <ng-container matColumnDef="creationDate">
@@ -205,7 +205,7 @@
 
         <ng-container matColumnDef="type">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
-          <td mat-cell *matCellDef="let element">{{element.type.toString()}}</td>
+          <td mat-cell *matCellDef="let element">{{element.type?.toString()}}</td>
         </ng-container>
 
         <ng-container matColumnDef="event.name">

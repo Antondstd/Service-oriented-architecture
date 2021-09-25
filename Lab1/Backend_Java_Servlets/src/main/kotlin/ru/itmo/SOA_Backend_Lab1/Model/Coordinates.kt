@@ -17,12 +17,14 @@ data class Coordinates(
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private var id:Long = 0
+    var id:Long = 0
 
     fun checkConstrains(){
         val COORDINATES_PRE = "У объекта Coordinates "
         if (x == null)
-            throw UnprocessableEntityException(COORDINATES_PRE + "y не должен быть меньше -571")
+            throw UnprocessableEntityException(COORDINATES_PRE + "x не должен быть null")
+        if (y == null)
+            throw UnprocessableEntityException(COORDINATES_PRE + "y не должен быть null")
         if (y!! < -571)
             throw UnprocessableEntityException(COORDINATES_PRE + "y не должен быть меньше -571")
     }
