@@ -9,6 +9,7 @@ import ru.itmo.SOA_Backend_Lab1.Model.TablesQueryAdditions
 import ru.itmo.SOA_Backend_Lab1.Model.Ticket
 import ru.itmo.SOA_Backend_Lab1.Util.ParamsChecker
 import ru.itmo.SOA_Backend_Lab1.Util.TicketXstream
+import java.time.ZonedDateTime
 
 
 class TicketService() : TicketDAO() {
@@ -115,6 +116,8 @@ class TicketService() : TicketDAO() {
         } catch (exception: Exception) {
             throw UnprocessableEntityException("Невалидный xml")
         }
+        newTicket.creationDate = ZonedDateTime.now().withNano(0)
+        println("ADDING TICKET WITH ZONED TIME ${newTicket.creationDate.toString()}")
         newTicket.id = 0
         newTicket.event?.id = 0
         newTicket.coordinates?.id = 0

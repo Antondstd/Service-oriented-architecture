@@ -9,6 +9,7 @@ import {FilterField} from "./app.component";
 // @ts-ignore
 import * as dateformat from 'dateformat';
 import {TableAdditions} from "./Model/table-additions.model";
+import * as moment from "moment";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class TicketsService {
   constructor(private http: HttpClient) {
   }
   SERVER_URL = "http://localhost:8080"
-  // SERVER_URL = "http://localhost:8080/"
+  // SERVER_URL = ""
 
   addTicket(ticket: Ticket): Observable<any> {
     var builder = new xml2js.Builder({'rootName': 'Ticket'});
@@ -46,13 +47,22 @@ export class TicketsService {
       additionsForTable.filter.fields.forEach((field: FilterField, key: String) => {
           // if (field.isActive && field.data != null && field.data != "")
           console.log("ADDING PARAM " + key + " " + field.isActive)
-          if (field.isActive && field.formControl.touched && field.formControl.value.toString() != "") {
+          if (field.isActive && field.formControl.value != null && field.formControl.touched && field.formControl.value.toString() != "") {
             console.log("ADDING PARAM " + key)
-            if (key == "event.date" || key == "creationDate")
+            console.log("DATE" + field.formControl.value.toString())
+            if (key == "event.date" || key == "creationDate") {
+              console.log("DATE " + field.formControl.value.toString())
               if (key == "event.date")
                 params = params.append(key.toString(), dateformat(field.formControl.value.toString(), "HH:MM:ss dd/mm/yy"))
-              else
-                params = params.append(key.toString(), dateformat(field.formControl.value.toString(), "HH:MM:ss dd/mm/yy z"))
+              else {
+
+                let newDate = moment(field.formControl.value.toString()).format()
+                  // let newDate =  dateformat(field.formControl.value.toString(), "dd/mm/yy")
+                console.log("NEWDATE " + newDate)
+                // let zone =  moment.tz.guess();
+                params = params.append(key.toString(), newDate)
+              }
+            }
             else
               params = params.append(key.toString(), field.formControl.value.toString())
           }
