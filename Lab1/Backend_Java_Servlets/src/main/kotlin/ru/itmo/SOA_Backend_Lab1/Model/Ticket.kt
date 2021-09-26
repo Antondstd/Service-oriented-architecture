@@ -45,7 +45,6 @@ data class Ticket(
     var id: Long = 0
 
     @NotNull
-    @CreationTimestamp
     @Column(columnDefinition= "TIMESTAMP WITH TIME ZONE")
     var creationDate: ZonedDateTime = ZonedDateTime.now()
 

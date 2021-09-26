@@ -6,6 +6,7 @@ import ru.itmo.SOA_Backend_Lab1.Exceptions.NotFoundException
 import ru.itmo.SOA_Backend_Lab1.Model.*
 import ru.itmo.SOA_Backend_Lab1.Util.HibernateUtil
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import javax.persistence.NoResultException
 import javax.persistence.PersistenceException
@@ -73,14 +74,25 @@ abstract class TicketDAO {
 
                 } else {
                     if (addition.column.equals("date") || addition.column.equals("creationDate")) {
-                        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yy")
-                        val date = LocalDateTime.parse(addition.firstValue, formatter)
-                        conditions.add(criteriaBuilder.equal(cur, date))
+                        val formatter:DateTimeFormatter
+                        if (addition.column.equals("date")) {
+                            formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yy")
+                            val date = LocalDateTime.parse(addition.firstValue, formatter)
+                            conditions.add(criteriaBuilder.equal(cur, date))
+                        }
+                        else if (addition.column.equals("creationDate"))
+                        {
+                            formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yy")
+//                            if (addition.firstValue!!.get(17) == ' ')
+                            val date = ZonedDateTime.parse(addition.firstValue?.replace(' ','+',true))
+                            conditions.add(criteriaBuilder.equal(cur, date))
+                        }
                     } else
                         conditions.add(criteriaBuilder.equal(cur, addition.firstValue))
                 }
             }
             catch (e:Exception){
+                e.printStackTrace()
                 throw BadRequestException("${addition.firstValue} -- неправильный формат данных для столбца ${addition.column} таблицы ${addition.table} ")
             }
         }
@@ -103,9 +115,14 @@ abstract class TicketDAO {
                 addClause(filterAdditions, root, false, createQueryCount, criteriaBuilder)
             }
             createQueryCount.select(criteriaBuilder.count(root))
-            val count = session.createQuery(createQueryCount).singleResult
-            transaction.commit()
-            return count
+            try {
+                val count = session.createQuery(createQueryCount).singleResult
+                transaction.commit()
+                return count
+            }
+            catch (e:Exception){
+                throw BadRequestException(e.cause.toString())
+            }
     }
 
     fun getTicket(id: Long): Ticket? {

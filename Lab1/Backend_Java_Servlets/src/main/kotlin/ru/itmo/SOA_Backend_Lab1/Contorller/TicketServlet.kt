@@ -87,10 +87,10 @@ class TicketServlet : HttpServlet() {
 
 
     fun cors(resp: HttpServletResponse) {
-        resp.setHeader("Content-Type", "text/xml; charset=UTF-16LE");
+        resp.setHeader("Content-Type", "text/xml; charset=UTF-16LE")
         resp.addHeader("Access-Control-Allow-Origin", "*")
-        resp.addHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, HEAD, OPTIONS");
-        resp.addHeader("Access-Control-Allow-Headers", "Content-Type");
-        resp.addHeader("Access-Control-Allow-Credentials", "true");
+        resp.addHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, HEAD, OPTIONS")
+        resp.addHeader("Access-Control-Allow-Headers", "Content-Type")
+        resp.addHeader("Access-Control-Allow-Credentials", "true")
     }
 }
