@@ -183,7 +183,7 @@ export class AppComponent {
             console.log(error)
           } else {
             console.log(result)
-            let listGrouped = result.list
+            let listGrouped = result.ResponseAdditions.listOfDistictTicketType
             console.log(listGrouped)
             if (listGrouped != "") {
               if (listGrouped.TicketType.constructor == Array) {

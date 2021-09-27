@@ -21,8 +21,12 @@ class DistinctType:HttpServlet() {
         resp.setHeader("Content-Type", "text/xml; charset=UTF-16LE")
         val xstream = TicketXstream.getParser()
         val responseAddtitions = ResponseAddtitions(mutableListOf())
-        ticketService.getDistinctTypes()?.forEach { responseAddtitions.listOfDistictTicketType?.add(it as TicketType) }
-        resp.writer.println(xstream.toXML(ticketService.getDistinctTypes()))
+        ticketService.getDistinctTypes()?.forEach { (it as TicketType?)?.let { it1 ->
+            responseAddtitions.listOfDistictTicketType?.add(
+                it1
+            )
+        } }
+        resp.writer.println(xstream.toXML(responseAddtitions))
         cors(resp)
     }
 

@@ -18,8 +18,8 @@ export class TicketsService {
 
   constructor(private http: HttpClient) {
   }
-  SERVER_URL = "http://localhost:8080"
-  // SERVER_URL = ""
+  // SERVER_URL = "http://localhost:8080"
+  SERVER_URL = ""
 
   addTicket(ticket: Ticket): Observable<any> {
     var builder = new xml2js.Builder({'rootName': 'Ticket'});
