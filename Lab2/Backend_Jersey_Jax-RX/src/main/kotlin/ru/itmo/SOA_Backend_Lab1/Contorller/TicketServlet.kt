@@ -8,6 +8,7 @@ import ru.itmo.SOA_Backend_Lab1.Util.TicketXstream
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.util.stream.Collectors
 import javax.servlet.http.HttpServlet
@@ -26,9 +27,7 @@ class TicketServlet{
     private var ticketService: TicketService = TicketService()
 
     @POST
-    @Consumes(MediaType.APPLICATION_XML)
-    @Produces(MediaType.APPLICATION_XML)
-    fun update(body: String): String {
+    fun addTicket(body: String): String {
 //        req.setCharacterEncoding("utf8")
 //        cors(resp)
 //        resp.setHeader("Content-Type", "text/xml; charset=UTF-16LE")
@@ -36,6 +35,8 @@ class TicketServlet{
 //        val inputStream: InputStream = req.inputStream
 //        val reader = BufferedReader(InputStreamReader(inputStream, StandardCharsets.UTF_8))
 //        val body = reader.lines().collect(Collectors.joining(System.lineSeparator()))
+//        val xml = String(body.encodeToByteArray(), Charset.forName("UTF-8"))
+//        println(xml)
         val ticket = ticketService.addTicketFromXml(body)
         val xstream = TicketXstream.getParser()
         return xstream.toXML(ticket)
@@ -70,6 +71,14 @@ class TicketServlet{
         val xstream = TicketXstream.getParser()
         return xstream.toXML(responsePagesTickets)
     }
+
+    @GET
+    @Path("{id}")
+    fun getTicket(@PathParam("id") id: Long):String{
+        val xstream = TicketXstream.getParser()
+        return xstream.toXML(ticketService.getTicket(id))
+    }
+
     @DELETE
     @Path("{id}")
     fun deleteTicket(@PathParam("id") id:Long) {
@@ -87,7 +96,8 @@ class TicketServlet{
 //        val reader = BufferedReader(InputStreamReader(inputStream, StandardCharsets.UTF_8))
 //        val body = reader.lines().collect(Collectors.joining(System.lineSeparator()))
 //        val id: Long = ParamsChecker.getAndcheckIfPathHasID(req.pathInfo)
-        ticketService.updateTicketFromXml(body, id)
+        val xml = String(body.encodeToByteArray(), Charset.forName("UTF-8"))
+        ticketService.updateTicketFromXml(xml, id)
     }
 //    @OPTIONS
 //    fun doOptions(req: HttpServletRequest, resp: HttpServletResponse) {

@@ -18,14 +18,15 @@ export class TicketsService {
 
   constructor(private http: HttpClient) {
   }
-  // SERVER_URL = "http://localhost:8080"
-  SERVER_URL = ""
+  SERVER_URL = "http://localhost:8080"
+  // SERVER_URL = "http://localhost:2111"
+  // SERVER_URL = ""
 
   addTicket(ticket: Ticket): Observable<any> {
     var builder = new xml2js.Builder({'rootName': 'Ticket'});
     var bodyXML = builder.buildObject(ticket);
     const myHeaders = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
-    return this.http.post(this.SERVER_URL+"/api/ticket", bodyXML, {
+    return this.http.post("http://localhost:2111/tickets", bodyXML, {
       headers: myHeaders,
       observe: 'response',
       responseType: 'text'

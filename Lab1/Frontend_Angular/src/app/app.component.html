@@ -212,6 +212,11 @@
           <td mat-cell *matCellDef="let element">{{element.type?.toString()}}</td>
         </ng-container>
 
+        <ng-container matColumnDef="event.id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Event ID</th>
+          <td mat-cell *matCellDef="let element">{{element.event?.id}}</td>
+        </ng-container>
+
         <ng-container matColumnDef="event.name">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Event Name</th>
           <td mat-cell *matCellDef="let element">{{element.event?.name}}</td>
