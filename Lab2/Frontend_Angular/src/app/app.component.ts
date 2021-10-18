@@ -137,7 +137,7 @@ export class AppComponent {
   cancelEvent(id: Number) {
     this.ticketService.cancelEvent(id).toPromise().then((data: Response) => {
       if (data.ok) {
-        this.openSnackBarMessage("Успешно Продан vip билет ")
+        this.openSnackBarMessage("Успешно удален билет с event.id: " + id)
         this.getTickets()
       } else {
         this.openSnackBarMessage("Ошибка: " + data.status + "\n" +

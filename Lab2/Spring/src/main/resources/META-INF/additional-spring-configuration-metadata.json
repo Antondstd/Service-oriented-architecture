@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "dir-to-certificates",
+      "type": "java.lang.String",
+      "description": "Description for dir-to-certificates."
+    },
+    {
+      "name": "apiService.url",
+      "type": "java.lang.String",
+      "description": "Description for apiService.url."
+    }
+  ] }

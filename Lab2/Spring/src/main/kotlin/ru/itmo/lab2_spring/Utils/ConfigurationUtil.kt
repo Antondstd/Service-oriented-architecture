@@ -11,7 +11,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 class ConfigurationUtil {
     @Value("\${apiService.url}")
-    lateinit var urlApiService:String
+    lateinit var urlApiService: String
+
 
     @Bean
     fun corsConfigurer(): WebMvcConfigurer? {

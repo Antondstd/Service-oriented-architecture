@@ -4,6 +4,8 @@ import org.apache.http.conn.ssl.NoopHostnameVerifier
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.ssl.SSLContextBuilder
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -18,37 +20,21 @@ import java.security.NoSuchAlgorithmException
 
 @Configuration
 class RestTemplateConfig {
-    @Bean
+    @Value("\${dir-to-certificates}")
+     lateinit var dirToSertificates: String
+
+    @Value("\${custom-trust-store}")
+    lateinit var customTrustStore: String
+
+    @Value("\${custom-trust-store-password}")
+    lateinit var customTrustStorePassword: String
+
+
     @Throws(NoSuchAlgorithmException::class, KeyManagementException::class)
     fun restTemplate(builder: RestTemplateBuilder): RestTemplate {
-//        val trustAllCerts: Array<TrustManager> = arrayOf<TrustManager>(
-//            object : X509TrustManager {
-//
-//
-//                override fun checkClientTrusted(
-//                    certs: Array<X509Certificate?>?, authType: String?
-//                ) {
-//                }
-//
-//                override fun checkServerTrusted(
-//                    certs: Array<X509Certificate?>?, authType: String?
-//                ) {
-//                }
-//
-//                override fun getAcceptedIssuers(): Array<X509Certificate> {
-//                    return arrayOf<X509Certificate>()
-//                }
-//            }
-//        )
-//        val sslContext: SSLContext = SSLContext.getInstance("SSL")
-//        sslContext.init(null, trustAllCerts, SecureRandom())
-//        val httpClient = HttpClients.custom()
-//            .setSSLContext(sslContext)
-//            .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE)
-//            .build()
         val sslContext = SSLContextBuilder.create()
-            .loadTrustMaterial(File("C:\\Program Files\\Java\\jdk-11.0.11\\bin\\payaratospringtruststore.jks"),
-                "soasoa".toCharArray())
+            .loadTrustMaterial(File(dirToSertificates + customTrustStore),
+                customTrustStorePassword.toCharArray())
             .build()
         val httpClient = HttpClients.custom()
             .setSSLContext(sslContext)
