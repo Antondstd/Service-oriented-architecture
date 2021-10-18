@@ -1,7 +1,11 @@
 package ru.itmo.lab2_spring.Services
 
+import org.apache.http.conn.ssl.NoopHostnameVerifier
+import org.apache.http.impl.client.CloseableHttpClient
+import org.apache.http.impl.client.HttpClients
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.web.client.RestTemplateBuilder
+import org.springframework.http.client.ClientHttpRequestFactory
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory
 import org.springframework.http.converter.StringHttpMessageConverter
 import org.springframework.stereotype.Service
@@ -13,9 +17,9 @@ import ru.itmo.lab2_spring.Model.Ticket
 import ru.itmo.lab2_spring.Model.TicketType
 import ru.itmo.lab2_spring.Repository.TicketRepository
 import ru.itmo.lab2_spring.Utils.ConfigurationUtil
+import ru.itmo.lab2_spring.Utils.RestTemplateConfig
 import ru.itmo.lab2_spring.Utils.RestTemplateResponseErrorHandler
 import java.nio.charset.StandardCharsets
-import org.apache.*
 
 
 @Service
@@ -24,12 +28,15 @@ class TicketService(private val ticketRepository: TicketRepository):TicketReposi
     @Autowired
     lateinit var configurationUtil: ConfigurationUtil
 
-//    var httpClient: CloseableHttpClient = HttpClients.custom().setSSLHostnameVerifier(NoopHostnameVerifier()).build()
 
-    var requestFactory = HttpComponentsClientHttpRequestFactory()
+//    var httpClient1: CloseableHttpClient = HttpClients.custom().setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE).build()
+//
+//    var requestFactory: ClientHttpRequestFactory = HttpComponentsClientHttpRequestFactory().apply { httpClient = httpClient1 }
+//
+//    val restTemplate = RestTemplateBuilder().requestFactory { HttpComponentsClientHttpRequestFactory().apply { httpClient = httpClient1 } }.errorHandler(RestTemplateResponseErrorHandler()).messageConverters(StringHttpMessageConverter(
+//        StandardCharsets.UTF_8)).build()
 
-    val restTemplate = RestTemplateBuilder().errorHandler(RestTemplateResponseErrorHandler()).messageConverters(StringHttpMessageConverter(
-        StandardCharsets.UTF_8)).build()
+    var restTemplate = RestTemplateConfig().restTemplate(RestTemplateBuilder())
 
     val urlToTicket = "/ticket"
     val urlToAdditions = "/additions"
@@ -89,16 +96,18 @@ class TicketService(private val ticketRepository: TicketRepository):TicketReposi
         val xstream = TicketXstream.getParser()
         var listOfTicket:List<Ticket>?
         val xml = getTicketsAsStringFromAPI(param)
-        try {
+//        try {
             listOfTicket = (xstream.fromXML(xml) as ResponsePagesTickets).tickets
             if (listOfTicket != null) {
                 for (ticket in listOfTicket){
                     deleteTicketAPI(ticket.id)
                 }
             }
-        } catch (exception: Exception) {
-            throw BadRequestException("Невалидный xml")
-        }
+//        } catch (exception: Exception) {
+//            println(exception.cause)
+//            println(exception.message)
+//            throw BadRequestException("Невалидный xml")
+//        }
     }
 
     fun getDistTypesFromAPI():String{

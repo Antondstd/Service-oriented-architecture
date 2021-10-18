@@ -2,6 +2,7 @@ package ru.itmo.SOA_Backend_Lab1.Util
 
 
 import com.thoughtworks.xstream.XStream
+import com.thoughtworks.xstream.security.AnyTypePermission
 import ru.itmo.lab2_spring.Model.ResponseAddtitions
 import ru.itmo.lab2_spring.Model.ResponsePagesTickets
 import ru.itmo.lab2_spring.Model.Ticket
@@ -21,6 +22,7 @@ class TicketXstream {
                 xstream!!.alias("ResponseAdditions", ResponseAddtitions::class.java)
                 xstream!!.registerConverter(LocalDateConvertor())
                 xstream!!.registerConverter(ZonedDateConvertor())
+                xstream!!.addPermission(AnyTypePermission.ANY)
             }
             return xstream as XStream
         }

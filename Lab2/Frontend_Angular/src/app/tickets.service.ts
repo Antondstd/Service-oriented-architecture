@@ -10,6 +10,8 @@ import {FilterField} from "./app.component";
 import * as dateformat from 'dateformat';
 import {TableAdditions} from "./Model/table-additions.model";
 import * as moment from "moment";
+// @ts-ignore
+import {environment} from '/src/environments/environment'
 
 @Injectable({
   providedIn: 'root'
@@ -18,15 +20,18 @@ export class TicketsService {
 
   constructor(private http: HttpClient) {
   }
+
   // SERVER_URL = "http://localhost:8080/api"
   // SERVER_URL = "http://localhost:2111"
   SERVER_URL = location.origin
+  mainService = environment.mainService + "/api"
+  secondService = environment.secondService
 
   addTicket(ticket: Ticket): Observable<any> {
     var builder = new xml2js.Builder({'rootName': 'Ticket'});
     var bodyXML = builder.buildObject(ticket);
     const myHeaders = new HttpHeaders().set('Content-Type', 'text/xml;charset=utf-8');
-    return this.http.post(this.SERVER_URL+"/tickets", bodyXML, {
+    return this.http.post(this.mainService + "/ticket", bodyXML, {
       headers: myHeaders,
       observe: 'response',
       responseType: 'text'
@@ -59,19 +64,18 @@ export class TicketsService {
               else {
 
                 let newDate = moment(field.formControl.value.toString()).format()
-                  // let newDate =  dateformat(field.formControl.value.toString(), "dd/mm/yy")
+                // let newDate =  dateformat(field.formControl.value.toString(), "dd/mm/yy")
                 console.log("NEWDATE " + newDate)
                 // let zone =  moment.tz.guess();
                 params = params.append(key.toString(), newDate)
               }
-            }
-            else
+            } else
               params = params.append(key.toString(), field.formControl.value.toString())
           }
         }
       )
     }
-    return this.http.get(this.SERVER_URL+"/tickets", {
+    return this.http.get(this.mainService + "/ticket", {
       headers: myHeaders,
       params: params,
       responseType: "text"
@@ -83,7 +87,7 @@ export class TicketsService {
     var bodyXML = builder.buildObject(ticket);
     const myHeaders = new HttpHeaders().set('Content-Type', 'text/xml;charset=utf-8');
     // var params = new HttpParams().append('id', ticket.id);
-    return this.http.put(this.SERVER_URL+"/tickets/"+ticket.id, bodyXML, {
+    return this.http.put(this.mainService + "/ticket/" + ticket.id, bodyXML, {
       headers: myHeaders,
       observe: 'response',
       responseType: "text"
@@ -92,7 +96,7 @@ export class TicketsService {
 
   deleteTicket(id: number): Observable<any> {
     const myHeaders = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
-    return this.http.delete(this.SERVER_URL+"/tickets/"+id, {
+    return this.http.delete(this.mainService + "/ticket/" + id, {
       headers: myHeaders,
       observe: 'response'
     })
@@ -101,7 +105,7 @@ export class TicketsService {
   deleteTicketByType(type: TicketType): Observable<any> {
     const myHeaders = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
     var params = new HttpParams().append('type', type);
-    return this.http.delete(this.SERVER_URL+"/additions/deleteTypeTicket", {
+    return this.http.delete(this.mainService + "/additions/deleteTypeTicket", {
       headers: myHeaders,
       params: params,
       observe: 'response',
@@ -111,7 +115,7 @@ export class TicketsService {
 
   sellVipTicket(id: Number): Observable<any> {
     const myHeaders = new HttpHeaders().set('Content-Type', 'text/xml;charset=utf-8');
-    return this.http.post(this.SERVER_URL+"/booking/sell/vip/"+id,"", {
+    return this.http.post(this.secondService + "/booking/sell/vip/" + id, "", {
       headers: myHeaders,
       observe: 'response',
       responseType: "text"
@@ -120,7 +124,7 @@ export class TicketsService {
 
   cancelEvent(id: Number): Observable<any> {
     const myHeaders = new HttpHeaders().set('Content-Type', 'text/xml;charset=utf-8');
-    return this.http.delete(this.SERVER_URL+"/booking/event/"+id+"/cancel", {
+    return this.http.delete(this.secondService + "/booking/event/" + id + "/cancel", {
       headers: myHeaders,
       observe: 'response',
       responseType: "text"
@@ -129,7 +133,7 @@ export class TicketsService {
 
   getGroupedDiscount(): Observable<any> {
     const myHeaders = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
-    return this.http.get(this.SERVER_URL+"/additions/groupedDiscountTicket", {
+    return this.http.get(this.mainService + "/additions/groupedDiscountTicket", {
       headers: myHeaders,
       observe: 'response',
       responseType: "text"
@@ -138,7 +142,7 @@ export class TicketsService {
 
   getDistinctType(): Observable<any> {
     const myHeaders = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
-    return this.http.get(this.SERVER_URL+"/additions/distinctTypeTicket", {
+    return this.http.get(this.mainService + "/additions/distinctTypeTicket", {
       headers: myHeaders,
       observe: 'response',
       responseType: "text"

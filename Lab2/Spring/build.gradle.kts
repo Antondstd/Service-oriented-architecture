@@ -32,6 +32,7 @@ dependencies {
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+    implementation("org.apache.httpcomponents:httpclient:4.5.13")
 
 
 }
@@ -41,10 +42,6 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "1.8"
     }
-}
-
-tasks.withType<JavaCompile> {
-    options.encoding = "UTF-8"
 }
 
 tasks.withType<Test> {
