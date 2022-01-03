@@ -131,7 +131,7 @@ export class AppComponent {
         this.openSnackBarMessage("Ошибка: " + data.status + "\n" +
           "Сообщение: " + data.body)
       }
-    }).catch((response: any) => this.handleResponse(response))
+    }).catch((response: any) => this.handleXmlErrorResponse(response))
   }
 
   cancelEvent(id: Number) {
@@ -143,7 +143,7 @@ export class AppComponent {
         this.openSnackBarMessage("Ошибка: " + data.status + "\n" +
           "Сообщение: " + data.body)
       }
-    }).catch((response: any) => this.handleResponse(response))
+    }).catch((response: any) => this.handleXmlErrorResponse(response))
   }
 
   openAddTicketDialog(isNew: boolean, position: number): void {
@@ -277,6 +277,19 @@ export class AppComponent {
     if (!response.ok)
       this.openSnackBarMessage("Ошибка: " + response.status + "\n" +
         "Сообщение: " + response.error)
+  }
+
+  handleXmlErrorResponse(response:any){
+    console.log("XML RESPONSE")
+    console.log(response.error)
+    xml2js.parseString(response.error, {explicitArray: false}, (error: string | undefined, result: any) => {
+      if (error) {
+        console.log(error)
+      } else {
+        this.openSnackBarMessage("Ошибка: " + response.status + "\n" +
+          "Сообщение: " + result.detail.message)
+      }
+    });
   }
 }
 

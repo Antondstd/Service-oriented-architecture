@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="coordinates" type="coordinatesDTO"/>
+
+  <xs:element name="event" type="eventDTO"/>
+
+  <xs:element name="ticket" type="ticketDTO"/>
+
+  <xs:complexType name="ticketDTO">
+    <xs:sequence>
+      <xs:element name="creationDate" type="xs:string" minOccurs="0"/>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+      <xs:element ref="coordinates" minOccurs="0"/>
+      <xs:element name="price" type="xs:long" minOccurs="0"/>
+      <xs:element name="discount" type="xs:int" minOccurs="0"/>
+      <xs:element name="comment" type="xs:string" minOccurs="0"/>
+      <xs:element name="type" type="ticketType" minOccurs="0"/>
+      <xs:element ref="event" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:long" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="coordinatesDTO">
+    <xs:sequence>
+      <xs:element name="x" type="xs:int" minOccurs="0"/>
+      <xs:element name="y" type="xs:long" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:long" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="eventDTO">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+      <xs:element name="date" type="xs:string" minOccurs="0"/>
+      <xs:element name="minAge" type="xs:int" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:long" use="required"/>
+  </xs:complexType>
+
+  <xs:simpleType name="ticketType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="VIP"/>
+      <xs:enumeration value="USUAL"/>
+      <xs:enumeration value="BUDGETARY"/>
+      <xs:enumeration value="CHEAP"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
+

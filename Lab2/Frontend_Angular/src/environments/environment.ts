@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   mainService: 'https://localhost:8181',
-  secondService: 'https://localhost:8443'
+  secondService: 'http://localhost:9999'
 };
 
 /*
