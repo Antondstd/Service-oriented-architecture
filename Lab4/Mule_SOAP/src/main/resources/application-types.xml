@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="ticket1" format="java">
+      <types:shape format="raml"><![CDATA[#%RAML 1.0 DataType
+type: string]]></types:shape>
+    </types:type>
+    <types:type name="test" format="xml">
+      <types:example format="xml" element="detail" location="examples/error_type.xml"/>
+    </types:type>
+    <types:type name="id" format="java">
+      <types:shape format="raml"><![CDATA[#%RAML 1.0 DataType
+type: number]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#ba05c5e3-489d-41e9-82c3-1ce7931fc6e5"/>
+  <types:enrichment select="#c38b9236-fb49-4cf4-8b58-7705b1027486">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="test"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#180a093c-6291-45fe-9987-6a216fedc3be">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="test"/>
+          <types:attributes type="test"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#3bab2197-bfac-49cf-aaaf-9e043f1c0607">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="test"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#7893fccd-0f08-4631-b718-ed5abcdc5853">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="ticket1"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#767c1aa9-4b39-41b8-9bee-50cb4f0f80f9">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="id"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

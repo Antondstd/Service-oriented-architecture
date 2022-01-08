@@ -18,19 +18,6 @@ import javax.xml.namespace.QName
 
 @Component
 class CustomExceptionResolver: AbstractEndpointExceptionResolver() {
-    private val FACTORY: ObjectFactory = ObjectFactory()
-
-    private var marshaller: Marshaller? = null
-
-    /**
-     * Prepare the [.marshaller] so we can marshall [FaultMessage] instances to XML.
-     * @throws JAXBException In case the JAX-B setup is incorrect.
-     */
-    @Throws(JAXBException::class)
-    fun OrderNotFoundExceptionResolver() {
-//        val jaxbContext = JAXBContext.newInstance(FaultMessage::class.java)
-//        marshaller = jaxbContext.createMarshaller()
-    }
 
     override fun resolveExceptionInternal(
         messageContext: MessageContext,
@@ -47,9 +34,8 @@ class CustomExceptionResolver: AbstractEndpointExceptionResolver() {
             val detail = soapFault.addFaultDetail()
             detail.addFaultDetailElement(QName("code")).addText(if (exception is NotFoundException) "404" else "400")
             detail.addFaultDetailElement(QName("message")).addText(exception.message)
-//            val faultDetail: SoapFaultDetail = soapFault.addFaultDetail()
             return true
         }
-        return false // We did not handle the Exception. Let's hope somebody else does...
+        return false
     }
 }
