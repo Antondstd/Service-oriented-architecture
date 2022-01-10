@@ -1,0 +1,20 @@
+<Ticket>
+  <id>5160</id>
+  <creationDate>21:35:47 09/01/22</creationDate>
+  <name>123</name>
+  <coordinates>
+    <id>5161</id>
+    <x>123</x>
+    <y>123</y>
+  </coordinates>
+  <price>3</price>
+  <discount>3</discount>
+  <comment>12424</comment>
+  <type>BUDGETARY</type>
+  <event>
+    <id>5162</id>
+    <name>213123</name>
+    <date>21:35:38 09/01/22</date>
+    <minAge>3</minAge>
+  </event>
+</Ticket>

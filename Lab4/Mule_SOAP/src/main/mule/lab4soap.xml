@@ -55,9 +55,30 @@ ns ns0 http://www.itmo.ru/springsoap/generated
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
 ns ns0 http://www.itmo.ru/springsoap/generated
-output text/xml
+output application/xml skipNullOn="everywhere"
 ---
-payload.body.ns0#makeVipAndDoubleCostResponse]]></ee:set-payload>
+{
+	Ticket: {
+		id: payload.body.ns0#makeVipAndDoubleCostResponse.ns0#ticket.@id,
+		creationDate: payload.body.ns0#makeVipAndDoubleCostResponse.ns0#ticket.ns0#creationDate,
+		name: payload.body.ns0#makeVipAndDoubleCostResponse.ns0#ticket.ns0#name,
+		coordinates: {
+			id: payload.body.ns0#makeVipAndDoubleCostResponse.ns0#ticket.ns0#coordinates.@id,
+			x: payload.body.ns0#makeVipAndDoubleCostResponse.ns0#ticket.ns0#coordinates.ns0#x,
+			y: payload.body.ns0#makeVipAndDoubleCostResponse.ns0#ticket.ns0#coordinates.ns0#y
+		},
+		price: payload.body.ns0#makeVipAndDoubleCostResponse.ns0#ticket.ns0#price,
+		discount: payload.body.ns0#makeVipAndDoubleCostResponse.ns0#ticket.ns0#discount,
+		comment: payload.body.ns0#makeVipAndDoubleCostResponse.ns0#ticket.ns0#comment,
+		"type": payload.body.ns0#makeVipAndDoubleCostResponse.ns0#ticket.ns0#"type",
+		event: {
+			id: payload.body.ns0#makeVipAndDoubleCostResponse.ns0#ticket.ns0#event.@id,
+			name: payload.body.ns0#makeVipAndDoubleCostResponse.ns0#ticket.ns0#event.ns0#name,
+			date: payload.body.ns0#makeVipAndDoubleCostResponse.ns0#ticket.ns0#event.ns0#date,
+			minAge: payload.body.ns0#makeVipAndDoubleCostResponse.ns0#ticket.ns0#event.ns0#minAge
+		}
+	}
+}]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<error-handler>
@@ -77,7 +98,7 @@ var parsed = (read(error.exception.cause.detail,"application/xml"))
 				</ee:transform>
 				<set-variable value='#[output application/java&#10;---&#10;payload.detail.code as String]' doc:name="Set Status code" doc:id="bffdf9f6-56e3-46ea-8fb7-63c8adcdf6a3" variableName="statusCode" />
 			</on-error-continue>
-			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="c618eb3f-1afe-4cc9-886e-ce2db439e91f" type="WSC:BAD_REQUEST, EXPRESSION" >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="c618eb3f-1afe-4cc9-886e-ce2db439e91f" type="EXPRESSION" >
 				<set-payload value='#[output application/xml&#10;---&#10;{&#10;	detail: {&#10;		code: 400,&#10;		message: "The id should be Number"&#10;	}&#10;}]' doc:name="Set Payload" doc:id="8066879e-46ee-4a5c-bcf0-f38fd1ea8113" />
 				<set-variable value="#[400]" doc:name="Set Status code" doc:id="a07b5a29-0f8d-47bd-a4af-92f9367ad02c" variableName="statusCode" />
 			</on-error-continue>

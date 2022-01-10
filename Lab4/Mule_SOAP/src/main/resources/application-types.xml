@@ -12,8 +12,19 @@ type: string]]></types:shape>
       <types:shape format="raml"><![CDATA[#%RAML 1.0 DataType
 type: number]]></types:shape>
     </types:type>
+    <types:type name="ticket" format="xml">
+      <types:example format="xml" element="Ticket" location="examples/ticket-2.xml"/>
+    </types:type>
   </types:catalog>
-  <types:enrichment select="#ba05c5e3-489d-41e9-82c3-1ce7931fc6e5"/>
+  <types:enrichment select="#ba05c5e3-489d-41e9-82c3-1ce7931fc6e5">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="ticket"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
   <types:enrichment select="#c38b9236-fb49-4cf4-8b58-7705b1027486">
     <types:processor-declaration>
       <types:output-event>
